@@ -3,8 +3,8 @@
 import express from 'express';
 import pino from 'pino-http';
 import cors from 'cors';
-import { env } from '../utils/env.js';
-import ContactCollection from '../db/models/Contacts.js';
+import { env } from './utils/env.js';
+import ContactCollection from './db/models/Contacts.js';
 
 const PORT = Number(env('PORT', '3000'));
 
