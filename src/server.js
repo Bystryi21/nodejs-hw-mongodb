@@ -4,7 +4,8 @@ import express from 'express';
 import pino from 'pino-http';
 import cors from 'cors';
 import { env } from './utils/env.js';
-import ContactCollection from './db/models/Contacts.js';
+// import ContactCollection from './db/models/Contacts.js';
+import * as contactServices from './services/contact.js';
 
 const PORT = Number(env('PORT', '3000'));
 
@@ -23,11 +24,28 @@ export const setupServer = () => {
   );
 
   app.get('/contacts', async (req, res) => {
-    const data = await ContactCollection.find();
-
+    const data = await contactServices.getContacts();
+    console.log(data);
     res.json({
       status: 200,
       message: 'Successfully found contacts!',
+      data,
+    });
+  });
+
+  app.get('/contacts/:id', async (req, res) => {
+    const { id } = req.params;
+    const data = await contactServices.getContactById(id);
+
+    if (!data) {
+      return res.status(404).json({
+        message: 'Contact not found',
+      });
+    }
+
+    res.json({
+      status: 200,
+      message: `Successfully found contact with id ${id}!`,
       data,
     });
   });
