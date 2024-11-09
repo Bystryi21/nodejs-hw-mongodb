@@ -1,7 +1,7 @@
 import * as contactServices from '../services/contact.js';
 import createHttpError from 'http-errors';
 import { contactsAddSchema } from '../validation/contacts.js';
-import { parsePaginationParams } from '../utils/parsePAginationParams.js';
+import { parsePaginationParams } from '../utils/parsePaginationParams.js';
 import { parseSortParams } from '../utils/parseSortParams.js';
 import { sortByList } from '../db/models/Contacts.js';
 import { parseContactsFilterParams } from '../utils/parseContactsFilterParams.js';
