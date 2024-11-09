@@ -19,9 +19,9 @@ const parseValue = (value) => {
 
   if (!isString) return;
 
-  const isFavourite = (value) => ['true', 'false'].includes(value);
-
-  return isFavourite(value);
+  if (value === 'true') return true;
+  if (value === 'false') return false;
+  return;
 };
 
 export const parseContactsFilterParams = (query) => {
