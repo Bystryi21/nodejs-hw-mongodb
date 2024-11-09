@@ -1,9 +1,25 @@
 import * as contactServices from '../services/contact.js';
 import createHttpError from 'http-errors';
+import { contactsAddSchema } from '../validation/contacts.js';
+import { parsePaginationParams } from '../utils/parsePAginationParams.js';
+import { parseSortParams } from '../utils/parseSortParams.js';
+import { sortByList } from '../db/models/Contacts.js';
+import { parseContactsFilterParams } from '../utils/parseContactsFilterParams.js';
 
 export const getContactsController = async (req, res, next) => {
-  const data = await contactServices.getContacts();
-  console.log(data);
+  const { page, perPage } = parsePaginationParams(req.query);
+  const { sortBy, sortOrder } = parseSortParams(req.query, sortByList);
+  const filter = parseContactsFilterParams(req.query);
+  console.log(filter);
+
+  const data = await contactServices.getContacts({
+    page,
+    perPage,
+    sortBy,
+    sortOrder,
+    filter,
+  });
+
   res.json({
     status: 200,
     message: 'Successfully found contacts!',
@@ -27,15 +43,11 @@ export const getContactByIdController = async (req, res, next) => {
 };
 
 export const addContactController = async (req, res, next) => {
-  const data = await contactServices.addContact(req.body);
+  const { error } = contactsAddSchema.validate(req.body, { abortEarly: false });
 
-  console.log(data);
-
-  res.status(201).json({
-    status: 201,
-    message: 'Successfully created a contact!',
-    data,
-  });
+  if (error) {
+    throw createHttpError(400, error.message);
+  }
 };
 
 export const upsertContactController = async (req, res) => {
