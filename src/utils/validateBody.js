@@ -1,12 +1,31 @@
+// import createHttpError from 'http-errors';
+
+// const validateBody = (schema) => {
+//   const func = async (req, res, next) => {
+//     const { error } = schema.validate(req.body, {
+//       abortEarly: false,
+//     });
+
+//     if (error) {
+//       return next(createHttpError(400, error.message));
+//     }
+//   };
+//   return func;
+// };
+
+// export default validateBody;
+
 import createHttpError from 'http-errors';
 
 const validateBody = (schema) => {
-  const func = (req, res, next) => {
-    const { error } = schema.validate(req.body, {
-      abortEarly: false,
-    });
+  const func = async (req, res, next) => {
+    try {
+      await schema.validateAsync(req.body, {
+        abortEarly: false,
+      });
 
-    if (error) {
+      next();
+    } catch (error) {
       return next(createHttpError(400, error.message));
     }
   };
