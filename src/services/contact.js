@@ -6,7 +6,7 @@ export const getContacts = async ({
   perPage = 10,
   sortBy = '_id',
   sortOrder = 'asc',
-  filter,
+  filter = {},
 }) => {
   const skip = (page - 1) * perPage;
 
