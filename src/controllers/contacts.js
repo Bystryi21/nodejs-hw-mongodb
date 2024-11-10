@@ -3,15 +3,16 @@ import createHttpError from 'http-errors';
 // import { contactsAddSchema } from '../validation/contacts.js';
 import { parsePaginationParams } from '../utils/parsePaginationParams.js';
 import { parseSortParams } from '../utils/parseSortParams.js';
-import { sortByList } from '../db/models/Contacts.js';
-import { parseContactsFilterParams } from '../utils/parseContactsFilterParams.js';
+import { parseFilterParams } from '../utils/parseContactsFilterParams.js';
+// import { sortByList } from '../db/models/Contacts.js';
+// import { parseContactsFilterParams } from '../utils/parseContactsFilterParams.js';
 
 export const getContactsController = async (req, res, next) => {
   const { page, perPage } = parsePaginationParams(req.query);
-  const { sortBy, sortOrder } = parseSortParams(req.query, sortByList);
-  const filter = parseContactsFilterParams(req.query);
+  const { sortBy, sortOrder } = parseSortParams(req.query);
+  const filter = parseFilterParams(req.query);
 
-  const data = await contactServices.getContacts({
+  const contacts = await contactServices.getContacts({
     page,
     perPage,
     sortBy,
@@ -21,8 +22,8 @@ export const getContactsController = async (req, res, next) => {
 
   res.json({
     status: 200,
-    message: 'Successfully found contacts!',
-    data,
+    message: 'Successfully found students!',
+    data: contacts,
   });
 };
 

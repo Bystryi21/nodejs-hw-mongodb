@@ -1,6 +1,8 @@
 // const parseValue = (value) => {
 //   if (typeof value === 'string') return;
 
+// import { query } from 'express';
+
 //   //   const parsedValue = parseInt(value);
 //   if (Number.isNaN(value)) {
 //     return value;
@@ -19,12 +21,13 @@ const parseValue = (value) => {
 
   if (!isString) return;
 
-  if (value === 'true') return true;
-  if (value === 'false') return false;
+  const isFavourite = (value) => ['true', 'false'].includes(value);
+
+  if (isFavourite(value)) return value;
   return;
 };
 
-export const parseContactsFilterParams = (query) => {
+export const parseFilterParams = (query) => {
   const { isFavourite } = query;
 
   const parsedIsFavourite = parseValue(isFavourite);
