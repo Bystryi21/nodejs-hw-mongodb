@@ -1,5 +1,5 @@
 import createHttpError from 'http-errors';
-import { findSesseion, findUser } from '../services/auth.js';
+import { findSession, findUser } from '../services/auth.js';
 
 export const authenticate = async (req, res, next) => {
   const authHeader = req.get('Authorization');
@@ -16,7 +16,7 @@ export const authenticate = async (req, res, next) => {
     );
   }
 
-  const session = await findSesseion({ accessToken: token });
+  const session = await findSession({ accessToken: token });
 
   if (!session) {
     return next(createHttpError(401, 'Session not found'));
@@ -31,6 +31,8 @@ export const authenticate = async (req, res, next) => {
   if (!user) {
     return next(createHttpError(401, 'User not found'));
   }
+
+  req.user = user;
 
   next();
 };

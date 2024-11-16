@@ -11,6 +11,8 @@ export const getContactsController = async (req, res, next) => {
   const { page, perPage } = parsePaginationParams(req.query);
   const { sortBy, sortOrder } = parseSortParams(req.query);
   const filter = parseFilterParams(req.query);
+  const { _id: userId } = req.user;
+  filter.userId = userId;
 
   const contacts = await contactServices.getContacts({
     page,
@@ -43,13 +45,9 @@ export const getContactByIdController = async (req, res, next) => {
 };
 
 export const addContactController = async (req, res, next) => {
-  // const { error } = contactsAddSchema.validate(req.body, { abortEarly: false });
+  const { _id: userId } = req.user;
 
-  // if (error) {
-  //   throw createHttpError(400, error.message);
-  // }
-
-  const data = await contactServices.addContact(req.body);
+  const data = await contactServices.addContact({ ...req.body, userId });
 
   res.status(201).json({
     status: 201,
