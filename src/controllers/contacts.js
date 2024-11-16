@@ -22,7 +22,7 @@ export const getContactsController = async (req, res, next) => {
 
   res.json({
     status: 200,
-    message: 'Successfully found students!',
+    message: 'Successfully found contacts!',
     data: contacts,
   });
 };

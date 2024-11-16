@@ -7,6 +7,7 @@ import contactsRouter from './routers/contacts.js';
 import { errorHandler } from './middlewares/errorHandler.js';
 import { notFoundHandler } from './middlewares/notFoundHandler.js';
 import { logger } from './middlewares/logger.js';
+import authRouter from './routers/auth.js';
 
 const PORT = Number(env('PORT', '3000'));
 
@@ -17,6 +18,8 @@ export const setupServer = () => {
   app.use(express.json());
 
   app.use(logger);
+
+  app.use('/auth', authRouter);
 
   app.use('/contacts', contactsRouter);
 
