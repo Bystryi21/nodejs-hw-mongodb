@@ -39,20 +39,16 @@ export const getContacts = async ({
   };
 };
 
-export const getContactById = (id) => ContactCollection.findById(id);
+export const getContactById = (id) => ContactCollection.findOne(id);
 
 export const addContact = (payload) => ContactCollection.create(payload);
 
 export const updateContact = async ({ _id, payload, options = {} }) => {
-  const rawResult = await ContactCollection.findByIdAndUpdate(
-    { _id },
-    payload,
-    {
-      ...options,
-      new: true,
-      includeResultMetadata: true,
-    },
-  );
+  const rawResult = await ContactCollection.findOneAndUpdate({ _id }, payload, {
+    ...options,
+    new: true,
+    includeResultMetadata: true,
+  });
   if (!rawResult || !rawResult.value) return null;
 
   return {
@@ -62,5 +58,5 @@ export const updateContact = async ({ _id, payload, options = {} }) => {
 };
 
 export const deleteContact = async (filter) => {
-  return ContactCollection.findByIdAndDelete(filter);
+  return ContactCollection.findOneAndDelete(filter);
 };

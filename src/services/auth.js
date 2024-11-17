@@ -49,7 +49,7 @@ export const login = async ({ email, password }) => {
   const newSession = createSession();
 
   return SessionCollection.create({
-    userId: user.id,
+    userId: user._id,
     ...newSession,
   });
 };
