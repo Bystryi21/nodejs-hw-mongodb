@@ -4,6 +4,7 @@ import createHttpError from 'http-errors';
 import { parsePaginationParams } from '../utils/parsePaginationParams.js';
 import { parseSortParams } from '../utils/parseSortParams.js';
 import { parseFilterParams } from '../utils/parseContactsFilterParams.js';
+import { saveFileToUploadDir } from '../utils/saveFileToUploadDir.js';
 // import { sortByList } from '../db/models/Contacts.js';
 // import { parseContactsFilterParams } from '../utils/parseContactsFilterParams.js';
 
@@ -74,22 +75,30 @@ export const upsertContactController = async (req, res) => {
   });
 };
 
-export const patchContactController = async (req, res) => {
-  const { id: _id } = req.params;
+export const patchContactController = async (req, res, next) => {
+  const { contactId } = req.params;
+  const photo = req.file;
 
-  const result = await contactServices.updateContact({
-    _id,
-    payload: req.body,
+  let photoUrl;
+
+  if (photo) {
+    photoUrl = await saveFileToUploadDir(photo);
+  }
+
+  const result = await contactServices.updateContact(contactId, {
+    ...req.body,
+    photo: photoUrl,
   });
 
   if (!result) {
-    throw createHttpError(404, 'Contact not found');
+    next(createHttpError(404, 'Contact not found'));
+    return;
   }
 
   res.json({
     status: 200,
-    message: 'Successfully patched a contact!',
-    data: result.data,
+    message: 'Successfully patched a contact',
+    data: result.contact,
   });
 };
 
