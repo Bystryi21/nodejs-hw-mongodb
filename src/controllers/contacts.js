@@ -79,6 +79,8 @@ export const upsertContactController = async (req, res) => {
 
 export const patchContactController = async (req, res, next) => {
   const { contactId } = req.params;
+  const { id: _id } = req.params;
+
   const photo = req.file;
 
   let photoUrl;
@@ -91,10 +93,13 @@ export const patchContactController = async (req, res, next) => {
     }
   }
 
-  const result = await contactServices.updateContact(contactId, {
-    ...req.body,
-    photo: photoUrl,
-  });
+  const result = await contactServices.updateContact(
+    { contactId, _id },
+    {
+      ...req.body,
+      photo: photoUrl,
+    },
+  );
   console.log(`result from controller : ${result}`);
 
   if (!result) {
