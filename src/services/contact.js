@@ -43,17 +43,24 @@ export const getContactById = (id) => ContactCollection.findOne(id);
 
 export const addContact = (payload) => ContactCollection.create(payload);
 
-export const updateContact = async ({ _id, payload, options = {} }) => {
-  const rawResult = await ContactCollection.findOneAndUpdate({ _id }, payload, {
-    ...options,
-    new: true,
-    includeResultMetadata: true,
-  });
+export const updateContact = async (contactId, payload, options = {}) => {
+  const rawResult = await ContactCollection.findOneAndUpdate(
+    {
+      _id: contactId,
+    },
+    payload,
+    {
+      new: true,
+      includeResultMetadata: true,
+      ...options,
+    },
+  );
+
   if (!rawResult || !rawResult.value) return null;
 
   return {
-    data: rawResult.value,
-    isNew: Boolean(rawResult.lastErrorObject.upserted),
+    contact: rawResult.value,
+    isNew: Boolean(rawResult?.lastErrorObject?.upserted),
   };
 };
 
