@@ -48,14 +48,42 @@ export const getContactByIdController = async (req, res, next) => {
 };
 
 export const addContactController = async (req, res, next) => {
-  const { _id: userId } = req.user;
+  const { name, phoneNumber, email, isFavourite, contactType } = req.body;
 
-  const data = await contactServices.addContact({ ...req.body, userId });
+  const { id: userId } = req.user;
+
+  const photo = req.file;
+
+  let photoUrl;
+
+  if (photo) {
+    if (env('ENABLE_CLOUDINARY') === 'true') {
+      photoUrl = await saveFileToCloudinary(photo);
+    } else {
+      photoUrl = await saveFileToUploadDir(photo);
+    }
+  }
+
+  if (!name || !phoneNumber || !contactType) {
+    return next(
+      createHttpError(400, 'Required fields : name, phoneNumber, contactType!'),
+    );
+  }
+
+  const newContact = await contactServices.addContact({
+    name,
+    phoneNumber,
+    email,
+    isFavourite,
+    contactType,
+    userId,
+    photo: photoUrl,
+  });
 
   res.status(201).json({
     status: 201,
     message: 'Contacts successfullt added',
-    data,
+    data: newContact,
   });
 };
 
@@ -96,7 +124,6 @@ export const patchContactController = async (req, res, next) => {
     ...req.body,
     photo: photoUrl,
   });
-  console.log(`result from controller : ${result}`);
 
   if (!result) {
     next(createHttpError(404, 'Contact not found'));
