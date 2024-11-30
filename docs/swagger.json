@@ -11,10 +11,10 @@
   },
   "servers": [
     {
-      "url": "http://localhost:3000"
+      "url": "https://nodejs-hw-mongodb-13-cg0w.onrender.com"
     },
     {
-      "url": "https://example.com/api/v1"
+      "url": "https://localhost:3000"
     }
   ],
   "tags": [
@@ -77,15 +77,10 @@
           },
           {
             "in": "query",
-            "name": "contactType",
+            "name": "isFavourite",
             "schema": {
-              "type": "string",
-              "enum": [
-                "work",
-                "home",
-                "personal"
-              ],
-              "example": "personal"
+              "type": "boolean",
+              "example": true
             }
           }
         ],
@@ -215,11 +210,6 @@
                       "home",
                       "personal"
                     ]
-                  },
-                  "userId": {
-                    "description": "Contact's id",
-                    "type": "string",
-                    "example": "65e4decdd286b30065d54af9"
                   },
                   "photo": {
                     "description": "Link to contact's photo",
@@ -351,7 +341,7 @@
           }
         ],
         "responses": {
-          "200": {
+          "204": {
             "description": "Delete contact by id",
             "content": {
               "application/json": {
@@ -385,6 +375,18 @@
         "security": [
           {
             "bearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "description": "ID of the contact to patch",
+            "schema": {
+              "type": "string",
+              "example": "65e4decdd286b30065d54af9"
+            }
           }
         ],
         "requestBody": {
@@ -426,11 +428,6 @@
                       "home",
                       "personal"
                     ]
-                  },
-                  "userId": {
-                    "description": "Contact's id",
-                    "type": "string",
-                    "example": "65e4decdd286b30065d54af9"
                   },
                   "photo": {
                     "description": "Link to contact's photo",
