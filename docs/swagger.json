@@ -11,7 +11,7 @@
   },
   "servers": [
     {
-      "url": "https://nodejs-hw-mongodb-13-cg0w.onrender.com"
+      "url": "https://nodejs-hw-mongodb-15-u9mg.onrender.com"
     },
     {
       "url": "https://localhost:3000"
@@ -342,23 +342,7 @@
         ],
         "responses": {
           "204": {
-            "description": "Delete contact by id",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object",
-                  "required": [
-                    "status"
-                  ],
-                  "properties": {
-                    "status": {
-                      "type": "integer",
-                      "example": 204
-                    }
-                  }
-                }
-              }
-            }
+            "description": "Delete contact by id"
           },
           "404": {
             "$ref": "#/components/responses/404"
